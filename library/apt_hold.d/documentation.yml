@@ -1,0 +1,42 @@
+---
+module: apt_hold
+
+short_description: Manages aptitude search pattern to hold or unhold packages
+
+description: |
+     The M(apt_hold) module the get list of currently held packages,
+     then search for a list of packages matching aptitude search patterns
+     and depending of hold option will either
+     hold found packages not already held
+     or unhold found packages currently held.
+     M(apt_hold) set C(apt_hold) dict facts to contains the list of C(held) packages,
+     C(found) packages mathing C(search)
+     and C(diff) packages to be hold or unhold if any.
+
+options:
+
+  search:
+    description: |
+      An argument to aptitude search to get the list of packages to hold or unhold
+      that can be either a string or a list of string.
+      When no C(search) string is given M(apt_hold) will still set facts for held packages.
+    required: false
+    default: null
+
+  hold:
+    description: Whether to hold or unhold the found packages.
+    required: false
+    choices: [ "yes", "no" ]
+    default: null
+
+  notfoundok:
+    description: |
+      Whether it is an error or not to I(hold) or I(unhold) an empty I(found) list of packages
+    required: false
+    choices: [ "yes", "no" ]
+    default: "no"
+
+notes: []
+requirements: [ "aptitude" ]
+author: Thierry Delamare
+...

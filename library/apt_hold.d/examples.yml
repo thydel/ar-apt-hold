@@ -1,0 +1,18 @@
+# set the list of held packages as fact in apt_hold
+- apt_hold:
+- debug: var=apt_hold
+
+# hold not yet held packages from a search string
+- apt_hold: hold=True search="?and(?maintainer(epiconcept), ?installed)"
+
+# - use an extra variable to toggle hold state
+# - use a list of search string
+# - use an extra variable to toggle show facts
+- apt_hold:
+    hold: |
+      {{ hold | default('yes') }}
+    search:
+      - ?and(?maintainer(epiconcept), ?installed)
+      - ~i^percona-xtrabackup$
+- debug: var=apt_hold
+  when: show is defined and show|int
