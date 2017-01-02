@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Thierry Delamare
+  description: Manages aptitude search pattern to hold or unhold packages
+  company: EpiConcept
+  license: MIT
+  min_ansible_version: 1.9
+  platforms:
+    - name: Debian
+      versions:
+        - jessie
+  galaxy_tags: [ packages ]
+dependencies: []
