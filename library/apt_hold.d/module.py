@@ -11,9 +11,9 @@ EXAMPLES = '''
 def main():
     
     argument_spec = dict(
-        hold = dict(required=False, choices=BOOLEANS, type='bool'),
-        search = dict(required=False),
-        notfoundok = dict(required=False, default='no', choices=BOOLEANS, type='bool'),
+        hold = dict(required=False, choices=BOOLEANS, type='bool', default=True),
+        search = dict(required=False, type='list', default=[]),
+        notfoundok = dict(required=False, choices=BOOLEANS, type='bool', default=False),
         )
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
@@ -25,20 +25,18 @@ def main():
     def getargs(arg):
         info[arg] = globals()[arg] = module.params.get(arg)
         
-    map(getargs, argument_spec.keys())
+    # all(map(getargs, argument_spec.keys()))
+    for arg in argument_spec.keys():
+        getargs(arg)
 
-    search_list = []
-    if search:
-        if type(search) is str:
-            info['search'] = search_list = [search]
-        else:
-            search_list = search
+    if (len(search) == 1 and search[0] == ''):
+        del search[0]
 
     cmd_apt                 = ["/usr/bin/env", "aptitude"]
     cmd_search = cmd_apt    + ["--disable-columns", "-F", "%p", "search"]
 
     cmd_held   = cmd_search + ["~ahold"]
-    cmd_find   = cmd_search + search_list
+    cmd_find   = cmd_search + search
 
     cmd_hold   = cmd_apt    + ["hold"]
     cmd_unhold = cmd_apt    + ["unhold"]
@@ -83,7 +81,6 @@ def main():
 
     module.exit_json(changed=changed, ansible_facts=ansible_facts)
 
-# this is magic, see lib/ansible/module_common.py
-#<<INCLUDE_ANSIBLE_MODULE_COMMON>>
+from ansible.module_utils.basic import *
 
 main()
