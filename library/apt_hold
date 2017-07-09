@@ -101,7 +101,7 @@ def main():
 
     # get the list of held packages
 
-    rc, out, err = module.run_command(cmd_held, check_rc=True)
+    rc, out, err = module.run_command(cmd_held, check_rc=False)
     # jessie aptitude 0.6.11 search return 0 for no result search
     # stretch aptitude 0.8.7 search return 1 for no result search
     if (rc == -1):
