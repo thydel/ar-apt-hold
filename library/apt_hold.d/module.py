@@ -44,6 +44,11 @@ def main():
     # get the list of held packages
 
     rc, out, err = module.run_command(cmd_held, check_rc=True)
+    # jessie aptitude 0.6.11 search return 0 for no result search
+    # stretch aptitude 0.8.7 search return 1 for no result search
+    if (rc == -1):
+        msg = "aptitude return -1"
+        module.fail_json(cmd=clean_args, rc=rc, stdout=stdout, stderr=stderr, msg=msg)
     held = out.split()
     info['held'] = held
 
